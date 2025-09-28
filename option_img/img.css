@@ -1,0 +1,60 @@
+/* Container */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+/* Each option card */
+.option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  background-color: #fff;
+}
+
+/* Hide default radio */
+.option input[type="radio"] {
+  display: none;
+}
+
+/* Text or image inside */
+.option .content {
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Hover effect */
+.option:hover {
+  border-color: #888;
+  background-color: #f9f9f9;
+}
+
+/* Selected state */
+.option input[type="radio"]:checked + .content {
+  font-weight: bold;
+  color: #222;
+}
+
+/* Highlight selected option card */
+.option input[type="radio"]:checked ~ .content,
+.option input[type="radio"]:checked ~ img {
+  border: none;
+}
+
+.option input[type="radio"]:checked + .content {
+  background: none;
+}
+
+.option:has(input[type="radio"]:checked) {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+}

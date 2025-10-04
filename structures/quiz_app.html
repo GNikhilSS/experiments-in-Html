@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: cadetblue;
+        }
+        .container{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .question-and-answer-container{
+            background-color: antiquewhite;
+            display: flex;
+            align-items: flex-start;
+            /* justify-content: center; */
+            flex-direction: column;
+            /* height: 50vh; */
+        }
+        .options-container{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+        }
+        .option-container{
+            background-color:darkgoldenrod;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .image-container{
+            background-color: aqua;
+            padding: 50px 30px;
+            margin: 10px;
+        }
+        button{
+            display: flex;
+            align-items: end;
+        }
+        /* Progress bar  */
+        .progress-bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .progress-bar-container .progress-steps{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-steps .progress-circle{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            height: 50px;
+            width: 50px;
+            color: #999;
+            font-size: 22px;
+            font-weight: 500;
+            border: 4px solid #e0e0e0;
+            border-radius: 50%;
+            transition: all 200ms ease;
+            transition-delay: 0ms;
+        }
+
+        .progress-steps .progress-circle.active{
+            border-color: #4070f4;
+            color: #4070f4;
+            transition-delay: 100ms;
+        }
+
+        .progress-steps .progress-bar{
+            position: absolute;
+            height: 4px;
+            width: 100%;
+            background: #e0e0e0;
+            z-index: -1;
+        }
+
+        .progress-bar .progress-indicator{
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: #4070f4;
+            transition: all 300ms ease;
+        }
+
+        .progress-bar-container .progress-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .progress-buttons button {
+            padding: 8px 25px;
+            background: #4070f4;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: all 200ms linear;
+        }
+
+        .progress-buttons button:active {
+            transform: scale(0.90);
+        }
+
+        .progress-buttons button:disabled {
+            background: #87a5f8;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Heading -->
+        <div class="heading-container">
+            <h1>Body Type Quiz</h1>
+        </div>
+        <!-- Disclaimer -->
+        <div class="disclaimer-container">
+            <p>**Choose most similar option</p>
+        </div>
+        <!-- Progess Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-steps">
+                <span class="progress-circle active">1</span>
+                <span class="progress-circle">2</span>
+                <span class="progress-circle">3</span>
+                <span class="progress-circle">4</span>
+                <div class="progress-bar">
+                    <span class="progress-indicator"></span>
+                </div>
+            </div>
+            <div class="progress-buttons">
+                <button id="progressPrev" disabled>Prev</button>
+                <button id="progressNext">Next</button>
+            </div>
+        </div>
+        <br />
+        <!-- Question and Answer -->
+        <div class="question-and-answer-container">
+            <!-- Question  -->
+            <div class="question">
+                <h2>1. Who are you?</h2>
+            </div>
+            <!-- Options container -->
+            <div class="options-container">
+                <!-- Options -->
+                <div class="option-container">
+                    <!-- Option Image -->
+                    <div class="image-container">
+                        <img alt="img1" />
+                    </div>
+                    <!-- Option Text  -->
+                    <p>Option 1</p>
+                </div>
+                <div class="option-container">
+                    <!-- Option Image -->
+                    <div class="image-container">
+                        <img alt="img1" />
+                    </div>
+                    <!-- Option Text  -->
+                    <p>Option 1</p>
+                </div>
+                <div class="option-container">
+                    <!-- Option Image -->
+                    <div class="image-container">
+                        <img alt="img1" />
+                    </div>
+                    <!-- Option Text  -->
+                    <p>Option 1</p>
+                </div>
+            </div>
+        </div>
+        <!-- Submit Button  -->
+        <!-- <div class="submit-button">
+            <button id="next" class="btn" type="button">Save and Next</button>
+        </div> -->
+    </div>
+    <script>
+        const circles = document.querySelectorAll(".progress-circle"),
+            progressBar = document.querySelector(".progress-indicator"),
+            buttons = document.querySelectorAll("button");
+
+        let currentStep = 1;
+
+        //Function to update current step and UI
+        const updateSteps = (e) => {
+            currentStep = e.target.id === "progressNext" ? ++currentStep : --currentStep;
+
+            circles.forEach((circle, index) => {
+                circle.classList[`${index < currentStep ? "add" : "remove"}`]('active');
+            })
+
+            progressBar.style.width = `${(currentStep - 1) / (circles.length - 1) * 100}%`
+
+            if (currentStep === circles.length) {
+                buttons[1].disabled = true;
+            } else if (currentStep === 1) {
+                buttons[0].disabled = true;
+            } else {
+                buttons[0].disabled = false;
+                buttons[1].disabled = false;
+            }
+        }
+
+        //Event listeners for all buttons
+        buttons.forEach(button => {
+            button.addEventListener("click", updateSteps)
+        })
+    </script>
+</body>
+</html>
